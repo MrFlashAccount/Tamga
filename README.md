@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/tamga-seal.png" alt="Tamga seal mark" width="220" />
+  <img src="./assets/tamga-seal.png" alt="Tamga seal mark" width="256" />
 </p>
 
 <h1 align="center">Tamga</h1>

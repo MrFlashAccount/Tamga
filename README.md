@@ -14,19 +14,3 @@ The recommended path is to implement Tamga directly in your own project, languag
 ## Reference Implementation
 
 This repository is the TypeScript reference implementation of the Tamga specification. Use it to validate expected API shape, runtime behavior, tests, build output, and packaging, but treat `SPEC.md` as the source of truth.
-
-## Install
-
-Publish is not configured yet. For local development:
-
-```sh
-pnpm install
-```
-
-## Scripts
-
-```sh
-pnpm run check
-pnpm run test
-pnpm run build
-```

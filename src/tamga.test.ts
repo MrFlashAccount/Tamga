@@ -1,6 +1,8 @@
 import type { StandardSchemaV1 } from "./standard-schema";
 import type { TamgaValue } from "./types";
+import * as v from "valibot";
 import { describe, it, expect, expectTypeOf } from "vitest";
+import { z } from "zod";
 
 import { tamga } from "./tamga";
 
@@ -86,6 +88,51 @@ describe("tamga", () => {
       expect(PositiveNumber.is(-1)).toBe(false);
       expect(PositiveNumber.to(3)).toBe(3);
       expect(() => PositiveNumber.to(-1)).toThrow("Tamga invariant violation");
+    });
+
+    it("should support Zod schemas through Standard Schema", () => {
+      const NonEmptyString = tamga<string, "NonEmptyString">({
+        validator: z.string().min(1),
+      });
+
+      expect(NonEmptyString.is("ok")).toBe(true);
+      expect(NonEmptyString.is("")).toBe(false);
+      expect(NonEmptyString.to("ok")).toBe("ok");
+      expect(() => NonEmptyString.to("")).toThrow("Tamga invariant violation");
+    });
+
+    it("should support Valibot schemas through Standard Schema", () => {
+      const NonEmptyString = tamga<string, "NonEmptyString">({
+        validator: v.pipe(v.string(), v.minLength(1)),
+      });
+
+      expect(NonEmptyString.is("ok")).toBe(true);
+      expect(NonEmptyString.is("")).toBe(false);
+      expect(NonEmptyString.to("ok")).toBe("ok");
+      expect(() => NonEmptyString.to("")).toThrow("Tamga invariant violation");
+    });
+
+    it("should return Standard Schema output values from checked conversion", () => {
+      const TrimmedString = tamga<string, "TrimmedString">({
+        validator: z.string().trim().min(1),
+      });
+
+      expect(TrimmedString.to("  ok  ")).toBe("ok");
+    });
+
+    it("should reject async Standard Schema validators", () => {
+      const validator: StandardSchemaV1<unknown, string> = {
+        "~standard": {
+          version: 1,
+          vendor: "test",
+          validate: async (value: unknown) =>
+            typeof value === "string" ? { value } : { issues: [{ message: "Expected string" }] },
+        },
+      };
+      const AsyncString = tamga<string, "AsyncString">({ validator });
+
+      expect(AsyncString.is("ok")).toBe(false);
+      expect(() => AsyncString.to("ok")).toThrow("Tamga invariant violation");
     });
   });
 

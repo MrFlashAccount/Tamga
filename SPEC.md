@@ -73,7 +73,7 @@ The returned constructor MUST be callable:
 const id = UserId("user-123");
 ```
 
-The returned value MUST be the exact runtime input value:
+Without a transforming Standard Schema validator, the returned value MUST be the exact runtime input value:
 
 ```ts
 UserId("user-123") === "user-123";
@@ -263,10 +263,13 @@ If a Standard Schema v1 validator is provided:
 - implementation MUST call `validate(value)`
 - result with non-null `issues` MUST fail
 - result with `value` and no non-null `issues` MUST pass
+- constructor call and `.to(value)` MUST return the Standard Schema result `value`
+- `.is(value)` MUST return whether the input is accepted; it does not expose transformed output
 - thrown validation errors MUST fail validation
 - Promise results MUST fail validation
 
 Async validation is intentionally unsupported.
+Use `.to(value)` when the caller needs a parsed, coerced, or transformed Standard Schema output value.
 
 ### 6.4 Error
 
@@ -329,6 +332,8 @@ Runtime tests:
 - Standard Schema validator rejects invalid input
 - Standard Schema validator works through `.is`
 - Standard Schema validator works through `.to`
+- Standard Schema validator returns schema output values through `.to`
+- async Standard Schema validators are rejected
 - `tamga.generic()` returns a factory
 - generic factory creates constructors for multiple value types
 - literal values remain literal at type level where possible

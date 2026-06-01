@@ -60,6 +60,40 @@ PositiveNumber.to(-1); // throws
 
 Validators are useful at boundaries: API responses, route params, form values, storage reads, and anywhere `unknown` data enters typed code.
 
+### Use Standard Schema libraries
+
+Tamga accepts schemas that implement Standard Schema, including Zod and Valibot. No adapter is needed.
+
+```ts
+const NonEmptyString = tamga<string, "NonEmptyString">({
+  validator: z.string().min(1),
+});
+
+NonEmptyString.to("ok"); // "ok"
+NonEmptyString.to(""); // throws
+```
+
+```ts
+const Slug = tamga<string, "Slug">({
+  validator: v.pipe(v.string(), v.regex(/^[a-z0-9-]+$/)),
+});
+
+Slug.is("hello-world"); // true
+Slug.is("Hello World"); // false
+```
+
+When a schema transforms or normalizes input, `.to()` returns the schema output.
+
+```ts
+const TrimmedString = tamga<string, "TrimmedString">({
+  validator: z.string().trim().min(1),
+});
+
+TrimmedString.to("  ok  "); // "ok"
+```
+
+Use `.to()` when you need the parsed or transformed value. Use `.is()` only for acceptance checks and narrowing the original value.
+
 ### Use `.to`, `.is`, and `.as`
 
 Each constructor has three helpers.

@@ -1,4 +1,8 @@
-# tamga
+<p align="center">
+  <img src="./assets/tamga-seal.png" alt="Tamga seal mark" width="220" />
+</p>
+
+<h1 align="center">Tamga</h1>
 
 Type-safe nominal branding utilities for TypeScript.
 

@@ -1,0 +1,53 @@
+{
+  "name": "tamga",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Type-safe nominal branding utilities for TypeScript.",
+  "keywords": [
+    "branding",
+    "nominal-types",
+    "types",
+    "typescript"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/tamga.js",
+  "types": "./dist/tamga.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/tamga.d.ts",
+      "default": "./dist/tamga.js"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run build:lib && pnpm run build:dts",
+    "build:lib": "tsdown",
+    "build:dts": "tsgo --emitDeclarationOnly -p tsconfig.build.json",
+    "check": "pnpm run check:type && pnpm run check:lint && pnpm run check:format",
+    "check:type": "tsgo --noEmit",
+    "check:lint": "oxlint --type-aware --tsconfig tsconfig.json src",
+    "check:format": "oxfmt --check .oxfmtrc.json package.json tsconfig.json tsconfig.build.json tsdown.config.ts vitest.config.ts README.md SPEC.md src",
+    "format": "oxfmt --write .oxfmtrc.json package.json tsconfig.json tsconfig.build.json tsdown.config.ts vitest.config.ts README.md SPEC.md src",
+    "prepack": "pnpm run build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "@typescript/native-preview": "7.0.0-dev.20260527.2",
+    "oxfmt": "0.52.0",
+    "oxlint": "1.67.0",
+    "oxlint-tsgolint": "0.23.0",
+    "tsdown": "0.22.1",
+    "vitest": "4.1.8"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "schema": "https://json.schemastore.org/package"
+}

@@ -126,6 +126,26 @@ const numberId = NumberEntityId(123);
 
 This is useful for reusable markers such as IDs, cache keys, opaque handles, or domain tags.
 
+### Extract the marked type
+
+When a constructor is the source of truth, extract its marked type through the phantom `.type` property.
+
+```ts
+const UserId = tamga<string, "UserId">();
+
+type UserId = typeof UserId.type;
+```
+
+`.type` is type-only. Do not read it at runtime.
+
+You can also use `ReturnType` when you prefer standard TypeScript utilities.
+
+```ts
+const UserId = tamga<string, "UserId">();
+
+type UserId = ReturnType<typeof UserId>;
+```
+
 ### Use type-only aliases
 
 Use `tamga.Generic<Name, Value>` when you only need the type.

@@ -196,6 +196,19 @@ export interface TypeMarker<Value, Type> {
 }
 ```
 
+Consumers SHOULD be able to extract a constructor's marked type with:
+
+```ts
+const UserId = tamga<string, "UserId">();
+type UserId = typeof UserId.type;
+```
+
+Consumers MAY also extract the marked type with:
+
+```ts
+type UserId = ReturnType<typeof UserId>;
+```
+
 An implementation SHOULD produce an actionable type-level error if `ValueType` is omitted.
 
 ### 5.8 Generic Factory
